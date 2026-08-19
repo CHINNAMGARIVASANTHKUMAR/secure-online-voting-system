@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow success-shell">
+    {% if registration %}
+    <section class="success-card">
+      <div class="success-icon">✔</div>
+      <h1>Registration Completed</h1>
+      <p>{{ registration.full_name }}, your voter registration is successful.</p>
+      <div class="receipt-box">
+        <p><strong>Generated Voter ID:</strong> {{ registration.unique_id }}</p>
+        <p><strong>Area:</strong> {{ registration.state }}, {{ registration.district }}, {{ registration.assembly_code }}</p>
+      </div>
+      <a class="main-btn btn-link" href="{{ url_for('login_page') }}">Go to Login</a>
+    </section>
+    {% elif vote_success %}
+    <section class="success-card animated-drop-wrap">
+      <div class="success-icon">✔</div>
+      <h1>Vote Submitted Successfully</h1>
+      <p>Your vote has been recorded and confirmed.</p>
+      <div class="drop-stage">
+        <div class="falling-slip">Receipt<br>{{ vote_success.party }}</div>
+        <div class="ballot-box">🗳️</div>
+      </div>
+      <div class="receipt-box">
+        <p><strong>Voter ID:</strong> {{ vote_success.unique_id }}</p>
+        <p><strong>Candidate:</strong> {{ vote_success.candidate_name }}</p>
+        <p><strong>Party:</strong> {{ vote_success.party }}</p>
+        <p><strong>Blockchain Hash:</strong> {{ vote_success.block_hash[:18] }}...</p>
+      </div>
+      <a class="main-btn btn-link" href="{{ url_for('home') }}">Back to Home</a>
+    </section>
+    {% else %}
+    <section class="success-card">
+      <div class="success-icon">ℹ</div>
+      <h1>No active receipt</h1>
+      <a class="main-btn btn-link" href="{{ url_for('home') }}">Go Home</a>
+    </section>
+    {% endif %}
+  </div>
+</body>
+</html>

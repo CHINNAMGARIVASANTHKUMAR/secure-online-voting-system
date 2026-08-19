@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow">
+    <header class="inner-header">
+      <a href="{{ url_for('home') }}" class="back-link">← Home</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">New Registration</div>
+    </header>
+
+    <div class="notice-bar compact"><div class="notice-track">Fill the form carefully. Aadhaar should be 12 digits and cannot be all zeros. Mobile must be your Aadhaar-linked number. Voter ID will be generated after OTP verification.</div></div>
+
+    <section class="form-page-card">
+      <div class="section-title-row">
+        <div>
+          <h1>New Voter Registration</h1>
+          <p>Complete the details exactly as per your records.</p>
+        </div>
+      </div>
+
+      <div class="form-grid two-col">
+        <label>Full Name<input id="reg_full_name" type="text" placeholder="Enter full name"></label>
+        <label>Date of Birth<input id="reg_dob" type="date"></label>
+        <label>Aadhaar Number<input id="reg_aadhaar" type="text" maxlength="12" placeholder="12-digit Aadhaar"></label>
+        <label>Aadhaar Linked Mobile<input id="reg_mobile" type="text" maxlength="10" placeholder="10-digit mobile"></label>
+        <label>Father Name<input id="reg_father_name" type="text" placeholder="Father name"></label>
+        <label>State<input id="reg_state" type="text" placeholder="State"></label>
+        <label>District<input id="reg_district" type="text" placeholder="District"></label>
+        <label>Mandal<input id="reg_mandal" type="text" placeholder="Mandal"></label>
+        <label>Pincode<input id="reg_pincode" type="text" maxlength="6" placeholder="6-digit pincode"></label>
+        <label>Assembly Code<input id="reg_assembly_code" type="text" placeholder="Assembly code"></label>
+        <label class="span-two">Village Name<input id="reg_village_name" type="text" placeholder="Village name"></label>
+      </div>
+
+      <div class="otp-box-row">
+        <label class="otp-field">OTP Verification<input id="reg_otp" type="text" maxlength="6" placeholder="Enter OTP"></label>
+        <button class="soft-btn" id="sendRegOtpBtn">Send OTP</button>
+        <button class="soft-btn secondary" id="resendRegOtpBtn">Resend OTP</button>
+        <button class="main-btn" id="completeRegBtn">Complete Registration</button>
+      </div>
+      <div class="message-box" id="registerMessage"></div>
+    </section>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

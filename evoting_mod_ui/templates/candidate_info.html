@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Information</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow fixed-page-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('dashboard_page') }}" class="back-link">← Dashboard</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Candidate Information</div>
+    </header>
+
+    <section class="form-page-card subpage-scroll">
+      <div class="section-title-row">
+        <div>
+          <h1>Candidate Information</h1>
+          <p>Only admin-unlocked parties are shown here.</p>
+        </div>
+      </div>
+
+      <div class="page-candidate-list">
+        {% for item in parties %}
+        <div class="candidate-info-item">
+          {% if item.photo_path %}
+          <img src="{{ url_for('static', filename=item.photo_path) }}" alt="{{ item.party }}" class="uploaded-party-image">
+          {% else %}
+          <div class="candidate-symbol">{{ item.symbol }}</div>
+          {% endif %}
+          <div>
+            <div class="mini-title">{{ item.candidate }}</div>
+            <div class="mini-sub">{{ item.party }}</div>
+          </div>
+        </div>
+        {% else %}
+        <div class="candidate-info-item"><div><div class="mini-title">No active parties</div><div class="mini-sub">Ask admin to unlock parties.</div></div></div>
+        {% endfor %}
+      </div>
+
+      <div style="margin-top:20px;">
+        <a class="main-btn btn-link" href="{{ url_for('dashboard_page') }}">Back to Dashboard</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

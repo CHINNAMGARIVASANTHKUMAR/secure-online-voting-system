@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Election Commission of India</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="landing-body">
+  <div class="portal-shell">
+    <header class="landing-header">
+      <div class="brand-block">
+        <div class="brand-logo">🛡️</div>
+        <div>
+          <div class="brand-title">Election Commission of India</div>
+          <div class="brand-sub">Digital Secure Voting Access Portal</div>
+        </div>
+      </div>
+      <div class="flag-chip">🇮🇳</div>
+    </header>
+
+    <div class="notice-bar">
+      <div class="notice-track">
+        Important Note: One vote per eligible voter • Keep your voter ID and registered mobile ready • Do not share OTP with anyone • Helpline 1950 available for assistance
+      </div>
+    </div>
+
+    <section class="hero-layout">
+      <div class="hero-left-panel">
+        <div class="eyebrow">Trusted Government Service</div>
+        <h1>Online Voting Portal</h1>
+        <p class="hero-copy">Simple, secure, and easy to understand interface for registration, voter login, and administration access.</p>
+        <div class="map-panel">
+          <div class="parliament-box">🏛️</div>
+          <div class="india-map-glow">INDIA</div>
+          <div class="vote-badge">VOTE</div>
+        </div>
+      </div>
+      <div class="hero-right-panel">
+        <div class="action-card">
+          <h2>Quick Access</h2>
+          <p>Choose your portal below.</p>
+          <a class="action-btn primary" href="{{ url_for('login_page') }}">Voter Login</a>
+          <a class="action-btn warm" href="{{ url_for('register_page') }}">New Registration</a>
+          <a class="action-btn ghost" href="{{ url_for('admin_login_page') }}">Administration Login</a>
+          <div class="trust-box">
+            <strong>Need help?</strong>
+            <span>Helpline: 1950</span>
+            <span>Email: support@eci-portal.local</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="support-grid">
+      <div class="support-card"><span>📝</span><div><h3>New Registration</h3><p>Register with Aadhaar-linked mobile and voter details.</p></div></div>
+      <div class="support-card"><span>🎧</span><div><h3>Voter Helpline</h3><p>Call 1950 for guidance and issue support.</p></div></div>
+      <div class="support-card"><span>🔒</span><div><h3>Safe & Secure</h3><p>OTP verification and one-vote-only validation.</p></div></div>
+    </section>
+  </div>
+</body>
+</html>

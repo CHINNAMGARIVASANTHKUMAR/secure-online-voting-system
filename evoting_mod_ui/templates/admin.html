@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell admin-shell fixed-page-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('home') }}" class="back-link">← Home</a>
+      <div class="page-brand">Election Commission of India</div>
+      <a class="header-side link-light" href="{{ url_for('admin_logout') }}">Logout</a>
+    </header>
+
+    <section class="admin-summary-grid">
+      <div class="summary-card"><h3>Total Registrations</h3><strong>{{ total_registrations }}</strong></div>
+      <div class="summary-card"><h3>Total Votes</h3><strong>{{ total_votes }}</strong></div>
+      <div class="summary-card"><h3>Voting Status</h3><strong>{{ 'Open' if voting_enabled else 'Stopped' }}</strong></div>
+    </section>
+
+    <section class="subpage-scroll">
+      <section class="admin-panels">
+        <div class="admin-panel">
+          <h2>Voting Control</h2>
+          <p>Users can still log in and open dashboard when voting is stopped.</p>
+          <div class="admin-action-row">
+            <form method="post" action="{{ url_for('admin_toggle_voting') }}">
+              <input type="hidden" name="action" value="start">
+              <button class="card-btn" type="submit">Start Voting</button>
+            </form>
+            <form method="post" action="{{ url_for('admin_toggle_voting') }}">
+              <input type="hidden" name="action" value="stop">
+              <button class="card-btn warn" type="submit">Stop Voting</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <h2>Upload / Update Party</h2>
+          <form class="form-grid two-col compact-grid" method="post" action="{{ url_for('admin_save_party') }}" enctype="multipart/form-data">
+            <label>Party Name<input type="text" name="party" placeholder="BJP / INC / TDP"></label>
+            <label>Candidate Name<input type="text" name="candidate" placeholder="Enter candidate name"></label>
+            <label>Party Symbol<input type="text" name="symbol" placeholder="🪷"></label>
+            <label>Photo Text<input type="text" name="photo" placeholder="RK"></label>
+            <label class="span-two">Upload Candidate / Party Image<input type="file" name="party_image" accept=".png,.jpg,.jpeg,.webp"></label>
+            <label><input type="checkbox" name="is_active" checked> Active / Unlocked</label>
+            <button class="main-btn" type="submit">Save Party</button>
+          </form>
+        </div>
+
+        <div class="admin-panel wide-panel">
+          <h2>Party Management</h2>
+          <table>
+            <tr><th>Party</th><th>Candidate</th><th>Symbol</th><th>Status</th><th>Action</th></tr>
+            {% for item in parties %}
+            <tr>
+              <td>{{ item.party }}</td>
+              <td>{{ item.candidate }}</td>
+              <td>{{ item.symbol }}</td>
+              <td>{{ 'Unlocked' if item.is_active else 'Locked' }}</td>
+              <td>
+                <form method="post" action="{{ url_for('admin_toggle_party', party_id=item.id) }}">
+                  <button class="soft-btn {% if item.is_active %}secondary{% endif %}" type="submit">{% if item.is_active %}Lock{% else %}Unlock{% endif %}</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">No parties found</td></tr>
+            {% endfor %}
+          </table>
+        </div>
+
+        <div class="admin-panel">
+          <h2>Party Status</h2>
+          <table><tr><th>Party</th><th>Votes</th></tr>{% for row in results %}<tr><td>{{ row.party }}</td><td>{{ row.count }}</td></tr>{% else %}<tr><td colspan="2">No votes yet</td></tr>{% endfor %}</table>
+        </div>
+
+        <div class="admin-panel">
+          <h2>Assembly Summary</h2>
+          <table><tr><th>Assembly</th><th>Votes</th></tr>{% for row in assembly_summary %}<tr><td>{{ row.assembly_code }}</td><td>{{ row.count }}</td></tr>{% else %}<tr><td colspan="2">No assembly data</td></tr>{% endfor %}</table>
+        </div>
+
+        <div class="admin-panel wide-panel">
+          <h2>Complaints From Users</h2>
+          <table>
+            <tr><th>Voter ID</th><th>Name</th><th>Subject</th><th>Message</th><th>Status</th><th>Action</th></tr>
+            {% for row in complaints %}
+            <tr>
+              <td>{{ row.unique_id }}</td>
+              <td>{{ row.full_name }}</td>
+              <td>{{ row.subject }}</td>
+              <td>{{ row.message }}</td>
+              <td>{{ row.status }}</td>
+              <td>
+                <form method="post" action="{{ url_for('admin_complaint_status', complaint_id=row.id) }}">
+                  <input type="hidden" name="status" value="Resolved">
+                  <button class="soft-btn" type="submit">Mark Resolved</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">No complaints yet</td></tr>
+            {% endfor %}
+          </table>
+        </div>
+
+        <div class="admin-panel wide-panel">
+          <h2>Registrations</h2>
+          <table><tr><th>ID</th><th>Name</th><th>Area</th><th>Created</th></tr>{% for row in registrations %}<tr><td>{{ row.unique_id }}</td><td>{{ row.full_name }}</td><td>{{ row.state }}, {{ row.district }}, {{ row.village_name }}</td><td>{{ row.created_at }}</td></tr>{% else %}<tr><td colspan="4">No registrations yet</td></tr>{% endfor %}</table>
+        </div>
+
+        <div class="admin-panel wide-panel">
+          <h2>Votes</h2>
+          <table><tr><th>ID</th><th>Party</th><th>Candidate</th><th>Assembly</th><th>Time</th></tr>{% for row in votes %}<tr><td>{{ row.unique_id }}</td><td>{{ row.party }}</td><td>{{ row.candidate_name }}</td><td>{{ row.assembly_code }}</td><td>{{ row.voted_at }}</td></tr>{% else %}<tr><td colspan="5">No votes yet</td></tr>{% endfor %}</table>
+        </div>
+      </section>
+    </section>
+  </div>
+</body>
+</html>

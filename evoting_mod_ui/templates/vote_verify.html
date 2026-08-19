@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow">
+    <header class="inner-header">
+      <a href="{{ url_for('dashboard_page') }}" class="back-link">← Dashboard</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Vote Verification</div>
+    </header>
+
+    <section class="verify-layout">
+      <div class="verify-id-card">
+        <h2>Voter ID Card</h2>
+        <div class="id-display-card">
+          <div class="avatar-square large">{{ voter.full_name[:1] }}</div>
+          <div>
+            <div class="mini-title">{{ voter.full_name }}</div>
+            <div class="mini-sub">Voter ID: {{ voter.unique_id }}</div>
+            <div class="mini-sub">{{ voter.state }}, {{ voter.district }}</div>
+            <div class="mini-sub">{{ voter.assembly_code }} / {{ voter.village_name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verify-panel">
+        <h2>OTP Verification for Voting</h2>
+        <p>Enter your voter ID and verify OTP to open the voting portal.</p>
+        <label>Voter ID Number<input id="vote_unique_id" type="text" value="{{ voter.unique_id }}" maxlength="9"></label>
+        <label>OTP<input id="vote_otp" type="text" maxlength="6" placeholder="Enter OTP"></label>
+        <div class="stack-actions">
+          <button class="soft-btn" id="sendVoteOtpBtn">Send OTP</button>
+          <button class="main-btn" id="verifyVoteOtpBtn">Verify and Continue</button>
+        </div>
+        <div class="message-box" id="voteVerifyMessage"></div>
+      </div>
+    </section>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

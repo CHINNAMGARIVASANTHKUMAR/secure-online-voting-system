@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow auth-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('home') }}" class="back-link">← Home</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Administration Login</div>
+    </header>
+    <section class="login-split-card admin-login-card single-column">
+      <div class="login-form-panel stretch">
+        <h1>Administration Login</h1>
+        <form method="post" class="form-grid one-col compact-grid">
+          <label>Username<input type="text" name="username" placeholder="Enter username"></label>
+          <label>Password<input type="password" name="password" placeholder="Enter password"></label>
+          <button class="main-btn" type="submit">Open Admin Dashboard</button>
+        </form>
+        {% if error %}<div class="message-box error show">{{ error }}</div>{% endif %}
+      </div>
+    </section>
+  </div>
+</body>
+</html>

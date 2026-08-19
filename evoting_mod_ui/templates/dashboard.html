@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voter Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="side-nav">
+      <div class="burger">☰</div>
+      <a class="nav-item active" href="{{ url_for('dashboard_page') }}">Dashboard</a>
+      <button type="button" class="nav-item nav-button" onclick="openVoting()">Voting Page</button>
+      <a class="nav-item" href="#services">Voting Service</a>
+      <a class="nav-item" href="{{ url_for('candidate_info_page') }}">Candidate Info</a>
+      <a class="nav-item" href="{{ url_for('complaint_page') }}">Complaint Box</a>
+      <a class="nav-item" href="{{ url_for('logout') }}">Logout</a>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="brand-inline">
+          <div class="brand-logo small">🛡️</div>
+          <div>
+            <div class="brand-title small-title">Election Commission of India</div>
+            <div class="brand-sub">Secure Voter Dashboard</div>
+          </div>
+        </div>
+
+        <details class="profile-dropdown">
+          <summary>
+            <div class="avatar-circle">{{ voter.full_name[:1] }}</div>
+            <span>{{ voter.full_name }}</span>
+          </summary>
+          <div class="profile-card">
+            <p><strong>Voter ID:</strong> {{ voter.unique_id }}</p>
+            <p><strong>Mobile:</strong> ******{{ voter.mobile[-4:] }}</p>
+            <p><strong>Assembly:</strong> {{ voter.assembly_code }}</p>
+            <p><strong>Village:</strong> {{ voter.village_name }}</p>
+            <p><strong>Status:</strong>
+              {% if vote_count %}Already Voted{% elif voting_enabled %}Voting Open{% else %}Voting Stopped{% endif %}
+            </p>
+          </div>
+        </details>
+      </header>
+
+      <section class="dashboard-content-scroll">
+        <div class="notice-bar compact"><div class="notice-track">Important Note: Review voter details before vote submission • Once submitted, vote cannot be changed • Support available through helpline desk • Only verified voters can access the voting portal</div></div>
+
+        <div class="party-marquee">
+          <div class="party-track">
+            {% for item in parties %}<span class="party-pill">{{ item.symbol }} {{ item.party }}</span>{% endfor %}
+            {% for item in parties %}<span class="party-pill">{{ item.symbol }} {{ item.party }}</span>{% endfor %}
+          </div>
+        </div>
+
+        {% if status_message %}<div class="message-box show error">{{ status_message }}</div>{% endif %}
+
+        <section class="dashboard-grid">
+          <div class="dash-card id-card-card">
+            <h3>Voter ID Card</h3>
+            <div class="id-mini-card">
+              <div class="avatar-square">{{ voter.full_name[:1] }}</div>
+              <div>
+                <div class="mini-title">{{ voter.full_name }}</div>
+                <div class="mini-sub">Voter ID: {{ voter.unique_id }}</div>
+                <div class="mini-sub">{{ voter.assembly_code }} • {{ voter.village_name }}</div>
+              </div>
+            </div>
+            <button class="card-btn" type="button" onclick="document.getElementById('profileCardBox').scrollIntoView({behavior:'smooth'})">Open Card</button>
+          </div>
+
+          <div class="dash-card vote-callout {% if vote_count or not voting_enabled %}disabled-card{% endif %}">
+            <h3>Voting Page</h3>
+            <p>
+              {% if vote_count %}
+                You already submitted your vote. Voting is locked for your voter ID.
+              {% elif voting_enabled %}
+                Verify voter ID and OTP to continue into the voting portal.
+              {% else %}
+                Admin has stopped voting right now. You can still use other dashboard services.
+              {% endif %}
+            </p>
+            <button class="card-btn" type="button" onclick="openVoting()">
+              {% if vote_count %}Already Voted{% elif voting_enabled %}Go to Vote{% else %}Voting Closed{% endif %}
+            </button>
+          </div>
+
+          <div class="dash-card profile-summary">
+            <h3>User Profile</h3>
+            <p><strong>Name:</strong> {{ voter.full_name }}</p>
+            <p><strong>State:</strong> {{ voter.state }}</p>
+            <p><strong>District:</strong> {{ voter.district }}</p>
+            <p><strong>Vote Status:</strong> {% if vote_count %}Submitted{% else %}Pending{% endif %}</p>
+            <p><strong>Voting Access:</strong> {% if voting_enabled %}Open{% else %}Stopped by Admin{% endif %}</p>
+          </div>
+
+          <div class="dash-card" id="services">
+            <h3>Voting Service</h3>
+            <p>Registration support, constituency details, and voter help.</p>
+            <button class="card-btn muted" type="button" onclick="showDashNotice('Voting services are available on this dashboard. Use profile, voter card, and help sections.')">View Service</button>
+          </div>
+
+          <div class="dash-card">
+            <h3>Candidate Information</h3>
+            <p>See unlocked parties and candidates before final voting.</p>
+            <a class="card-btn btn-link-inline" href="{{ url_for('candidate_info_page') }}">Open Page</a>
+          </div>
+
+          <div class="dash-card">
+            <h3>Complaint Box</h3>
+            <p>Send a complaint or suggestion. Admin can view it in the admin dashboard.</p>
+            <a class="card-btn warn btn-link-inline" href="{{ url_for('complaint_page') }}">Send Complaint</a>
+          </div>
+
+          <div class="dash-card">
+            <h3>Vote Result Scale</h3>
+            <p>Total votes cast in system: {{ total_votes }}</p>
+            <div class="mini-meter"><span style="width: {{ 100 if total_votes else 8 }}%"></span></div>
+          </div>
+
+          <div class="dash-card" id="profileCardBox">
+            <h3>Voting Card</h3>
+            <div class="id-display-card compact-card">
+              <div class="avatar-square large">{{ voter.full_name[:1] }}</div>
+              <div>
+                <div class="mini-title">{{ voter.full_name }}</div>
+                <div class="mini-sub">Voter ID: {{ voter.unique_id }}</div>
+                <div class="mini-sub">{{ voter.state }}, {{ voter.district }}, {{ voter.mandal }}</div>
+                <div class="mini-sub">{{ voter.assembly_code }} / {{ voter.village_name }}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="message-box" id="dashboardNotice"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const hasVoted = {{ 'true' if vote_count else 'false' }};
+    const votingEnabled = {{ 'true' if voting_enabled else 'false' }};
+
+    function showDashNotice(text, ok = false) {
+      const box = document.getElementById('dashboardNotice');
+      box.textContent = text;
+      box.classList.add('show');
+      box.classList.toggle('error', !ok);
+      setTimeout(() => box.classList.remove('show'), 2600);
+    }
+
+    function openVoting() {
+      if (hasVoted) {
+        showDashNotice('You have already voted. Voting page is locked for your account.');
+        return;
+      }
+      if (!votingEnabled) {
+        showDashNotice('Voting is currently stopped by admin. Please try later.');
+        return;
+      }
+      window.location.href = "{{ url_for('vote_verify_page') }}";
+    }
+  </script>
+</body>
+</html>

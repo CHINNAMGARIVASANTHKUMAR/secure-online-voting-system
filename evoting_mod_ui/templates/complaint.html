@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaint Box</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow fixed-page-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('dashboard_page') }}" class="back-link">← Dashboard</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Complaint Box</div>
+    </header>
+
+    <section class="form-page-card subpage-scroll">
+      <div class="section-title-row">
+        <div>
+          <h1>Complaint & Suggestion</h1>
+          <p>Submit your issue. It will appear in the admin page.</p>
+        </div>
+      </div>
+
+      <form method="post" class="form-grid one-col compact-grid">
+        <label>Subject<input type="text" name="subject" placeholder="Enter complaint subject"></label>
+        <label>Message<textarea name="message" rows="7" placeholder="Write your complaint or suggestion here"></textarea></label>
+        <div class="stack-actions" style="margin-top:8px;">
+          <button class="main-btn" type="submit">Submit Complaint</button>
+          <a class="soft-btn secondary btn-link" href="{{ url_for('dashboard_page') }}">Back to Dashboard</a>
+        </div>
+      </form>
+      {% if success_message %}<div class="message-box show">{{ success_message }}</div>{% endif %}
+      {% if error %}<div class="message-box show error">{{ error }}</div>{% endif %}
+    </section>
+  </div>
+</body>
+</html>

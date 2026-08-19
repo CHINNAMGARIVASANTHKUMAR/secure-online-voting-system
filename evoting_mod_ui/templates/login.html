@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voter Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell narrow auth-shell fixed-page-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('home') }}" class="back-link">← Home</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Voter Login</div>
+    </header>
+
+    <section class="login-split-card">
+      <div class="login-copy-panel">
+        <h1>Voter Login</h1>
+        <p>Login with your generated voter ID and Aadhaar-linked mobile number.</p>
+        <ul class="info-list">
+          <li>Only one vote is allowed per voter ID</li>
+          <li>OTP will be sent to your registered mobile</li>
+          <li>Keep your voter ID ready before login</li>
+        </ul>
+      </div>
+      <div class="login-form-panel">
+        <div class="form-grid one-col compact-grid">
+          <label>Voter ID Number<input id="login_unique_id" type="text" maxlength="9" placeholder="9-digit voter ID"></label>
+          <label>Registered Mobile Number<input id="login_mobile" type="text" maxlength="10" placeholder="10-digit mobile"></label>
+          <label>OTP<input id="login_otp" type="text" maxlength="6" placeholder="Enter OTP"></label>
+        </div>
+        <div class="stack-actions">
+          <button class="soft-btn" id="sendLoginOtpBtn">Send OTP</button>
+          <button class="soft-btn secondary" id="resendLoginOtpBtn">Resend OTP</button>
+          <button class="main-btn" id="verifyLoginBtn">Login Now</button>
+        </div>
+        <div class="message-box" id="loginMessage"></div>
+        <div class="auth-links"><a href="{{ url_for('register_page') }}">New user? Register here</a></div>
+      </div>
+    </section>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

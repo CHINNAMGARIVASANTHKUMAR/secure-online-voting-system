@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cast Your Vote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="inner-body">
+  <div class="page-shell wide fixed-page-shell">
+    <header class="inner-header">
+      <a href="{{ url_for('dashboard_page') }}" class="back-link">← Dashboard</a>
+      <div class="page-brand">Election Commission of India</div>
+      <div class="header-side">Voting Portal</div>
+    </header>
+
+    <section class="vote-portal-header">
+      <div>
+        <h1>Cast Your Vote</h1>
+        <p>Select one party and confirm your vote.</p>
+      </div>
+      <div class="secure-badge">Secure Session</div>
+    </section>
+
+    <section class="candidate-grid subpage-scroll">
+      {% for item in parties %}
+      <button class="candidate-card" data-party="{{ item.party }}">
+        <div class="candidate-top">
+          {% if item.photo_path %}<div class="candidate-photo"><img src="{{ url_for('static', filename=item.photo_path) }}" alt="{{ item.party }}"></div>{% else %}<div class="candidate-photo">{{ item.photo }}</div>{% endif %}
+          <div class="candidate-symbol">{{ item.symbol }}</div>
+        </div>
+        <div class="candidate-name">{{ item.candidate }}</div>
+        <div class="candidate-party">{{ item.party }}</div>
+      </button>
+      {% endfor %}
+    </section>
+
+    <div class="submit-strip">
+      <div class="selected-copy" id="selectedPartyText">No party selected</div>
+      <button class="main-btn" id="submitVoteBtn">Submit Vote</button>
+    </div>
+    <div class="message-box" id="voteMessage"></div>
+  </div>
+
+  <div class="confirm-modal hidden" id="confirmModal">
+    <div class="confirm-card">
+      <h3>Confirm Vote</h3>
+      <p id="confirmText">Are you sure you want to submit your vote?</p>
+      <div class="modal-actions">
+        <button class="soft-btn secondary" id="cancelVoteBtn">Cancel</button>
+        <button class="main-btn" id="confirmVoteBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
